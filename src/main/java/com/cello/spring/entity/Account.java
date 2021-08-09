@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-@MyComponent
+@MyComponent("myAccount")
 @NoArgsConstructor
 // Data注解表示默认有setter和getter
 public class Account {
