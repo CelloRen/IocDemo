@@ -108,6 +108,22 @@ public class MyAnnotationConfigApplicationContext {
                         }
                     } else {
                         // byType
+                        for (String beanName : iocMap.keySet()) {
+                            if (iocMap.get(beanName).getClass() == declaredField.getType()) {
+                                try {
+                                    String filedName = declaredField.getName();
+                                    String methodName = "set" + filedName.substring(0, 1).toUpperCase() + filedName.substring(1);
+                                    Method method = clazz.getMethod(methodName, declaredField.getType());
+                                    method.invoke(getBean(beanDefinition.getBeanName()), iocMap.get(beanName));
+                                } catch (NoSuchMethodException e) {
+                                    e.printStackTrace();
+                                } catch (IllegalAccessException e) {
+                                    e.printStackTrace();
+                                } catch (InvocationTargetException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -122,6 +138,8 @@ public class MyAnnotationConfigApplicationContext {
                 return value;
             case "java.lang.Float":
                 return Float.valueOf(value);
+            case "java.lang.Double":
+                return Double.valueOf(value);
             // and so on
         }
         return null;
