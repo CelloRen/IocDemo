@@ -1,19 +1,19 @@
 package com.cello.spring.entity;
 
+import com.cello.myspring.MyComponent;
+import com.cello.myspring.MyValue;
 import lombok.*;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Component;
 
 @Setter
 @Getter
 @ToString
-//@Component
+@MyComponent
 @NoArgsConstructor
 // Data注解表示默认有setter和getter
 public class Order {
-//    @Value("2")
+    @MyValue("2")
     private Integer orderId;
 
-//    @Value("12.5")
+    @MyValue("12.5")
     private Double price;
 }

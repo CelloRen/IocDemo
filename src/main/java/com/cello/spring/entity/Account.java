@@ -1,24 +1,23 @@
 package com.cello.spring.entity;
 
+import com.cello.myspring.MyComponent;
+import com.cello.myspring.MyValue;
 import lombok.*;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Component;
 
 @Setter
 @Getter
 @ToString
-//@Component
+@MyComponent
 @NoArgsConstructor
 // Data注解表示默认有setter和getter
 public class Account {
-//    @Value("1")
+    @MyValue("1")
     private Integer id;
 
-//    @Value("zhang san")
+    @MyValue("zhang san")
     private String name;
 
-//    @Value("20")
+    @MyValue("20")
     private Integer age;
 
 //    @Autowired
