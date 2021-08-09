@@ -7,7 +7,7 @@ import com.cello.serivce.HelloService;
 import java.util.List;
 
 public class HelloServiceImpl implements HelloService {
-    private HelloDao helloDao = BeanFactory.getDao();
+    private HelloDao helloDao = (HelloDao) BeanFactory.getDao("helloDao");
 
     @Override
     public List<String> findAll() {
