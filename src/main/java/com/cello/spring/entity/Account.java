@@ -1,6 +1,8 @@
 package com.cello.spring.entity;
 
+import com.cello.myspring.MyAutowired;
 import com.cello.myspring.MyComponent;
+import com.cello.myspring.MyQualifier;
 import com.cello.myspring.MyValue;
 import lombok.*;
 
@@ -20,6 +22,7 @@ public class Account {
     @MyValue("20")
     private Integer age;
 
-//    @Autowired
+    @MyAutowired
+    @MyQualifier("myOrder")
     private Order myOrder;
 }

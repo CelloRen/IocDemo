@@ -18,10 +18,12 @@ public class MyAnnotationConfigApplicationContext {
         Set<MyBeanDefinition> beanDefinitions = findBeanDefinitions(packageName);
         // 根据原材料创建对象, 并存入缓存
         createObject(beanDefinitions);
+        // 自动装载
+        autowireObject(beanDefinitions);
     }
 
     // 获取原材料
-    public Set<MyBeanDefinition> findBeanDefinitions(String packageName) {
+    private Set<MyBeanDefinition> findBeanDefinitions(String packageName) {
         Set<MyBeanDefinition> beanDefinitionSet = new HashSet<>();
         //  遍历包中的类
         Set<Class<?>> classes = MyTools.getClasses(packageName);
@@ -47,7 +49,7 @@ public class MyAnnotationConfigApplicationContext {
         return iocMap.get(beanName);
     }
 
-    public void createObject(Set<MyBeanDefinition> beanDefinitionSet) {
+    private void createObject(Set<MyBeanDefinition> beanDefinitionSet) {
         beanDefinitionSet.forEach(beanDefinition -> {
             Class clazz = beanDefinition.getBeanClass();
             try {
@@ -77,6 +79,37 @@ public class MyAnnotationConfigApplicationContext {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
+            }
+        });
+    }
+
+    private void autowireObject(Set<MyBeanDefinition> beanDefinitions) {
+        beanDefinitions.forEach(beanDefinition -> {
+            Class clazz = beanDefinition.getBeanClass();
+            for (Field declaredField : clazz.getDeclaredFields()) {
+                MyAutowired myAutowired = declaredField.getAnnotation(MyAutowired.class);
+                if (myAutowired != null) {
+                    MyQualifier myQualifier = declaredField.getAnnotation(MyQualifier.class);
+                    if (myQualifier != null) {
+                        try {
+                            // byName
+                            String beanName = myQualifier.value();
+                            Object bean = iocMap.get(beanName);
+                            String filedName = declaredField.getName();
+                            String methodName = "set" + filedName.substring(0, 1).toUpperCase() + filedName.substring(1);
+                            Method method = clazz.getMethod(methodName, declaredField.getType());
+                            method.invoke(getBean(beanDefinition.getBeanName()), bean);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        // byType
+                    }
+                }
             }
         });
     }
